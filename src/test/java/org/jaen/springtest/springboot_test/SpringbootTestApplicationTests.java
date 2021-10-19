@@ -64,4 +64,21 @@ class SpringbootTestApplicationTests {
 		assertEquals("1000", saldoOrigen.toPlainString());
 		assertEquals("2000", saldoDestino.toPlainString());
 	}
+
+	@Test
+	void saveTest(){
+		//Given
+		Cuenta nuevaCuenta = new Cuenta(null, "Mario", new BigDecimal("3000"));
+		when(cuentaRepository.save(any())).then(invocation ->{
+			Cuenta c = invocation.getArgument(0);
+			c.setId(3L);
+			return c;
+		});
+		//When
+		Cuenta cuenta = service.save(nuevaCuenta);
+		//Then
+		assertEquals("Mario", cuenta.getNombre());
+		assertEquals(3, cuenta.getId());
+		assertEquals("3000", cuenta.getSaldo().toPlainString());
+	}
 }
